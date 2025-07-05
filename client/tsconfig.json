@@ -1,0 +1,28 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "compilerOptions": {
+    "module": "ESNext",
+    // ✅ REQUIRED
+    "target": "ES2020",
+    // ✅ OR newer
+    "moduleResolution": "Node",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "vite/client",
+      "@cloudflare/workers-types"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+
+# sst
+.sst
+node_modules
+*.env*
+/dist
+
+sst-env.d.ts
+.idea
+
+routeTree.gen.ts
+.wrangler
+assets/sono
