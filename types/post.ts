@@ -1,8 +1,8 @@
 import { type Selectable } from 'kysely';
 
-export type PostStatus = '' | 'draft' | 'published'
+export type PostStatus = '' | 'draft' | 'published';
 
-export type PostType = 'article' | 'coffee'
+export type PostType = 'article' | 'coffee';
 
 export interface PostTable {
   id: number; // from gorm.Model
@@ -27,4 +27,4 @@ export interface PostTable {
   tags_literal: string;
 }
 
-export type Post = Selectable<PostTable>
+export type Post = Selectable<PostTable>;

@@ -7,7 +7,11 @@ import { type OpenHour } from '@rpcTypes/openHour';
 
 export async function coffeeById(id: string) {
   const db = await getDB();
-  const coffee = await db.selectFrom('coffees').where('coffees.id', '=', id).selectAll().executeTakeFirst();
+  const coffee = await db
+    .selectFrom('coffees')
+    .where('coffees.id', '=', id)
+    .selectAll()
+    .executeTakeFirst();
 
   return { coffee: coffee };
 }
@@ -19,7 +23,8 @@ export async function coffees() {
 
 export async function latestReviews() {
   const db = await getDB();
-  return await db.selectFrom('coffees')
+  return await db
+    .selectFrom('coffees')
     .selectAll()
     .where('coffees.status', '=', 'reviewed')
     .orderBy('coffees.updated_at', 'desc')
@@ -30,15 +35,23 @@ export async function search(queryParam: string | undefined) {
   const db = await getDB();
   const queryString = `%${queryParam?.trim() ?? ''}%`;
 
-  const coffees = await db.selectFrom('coffees')
+  const coffees = await db
+    .selectFrom('coffees')
     .selectAll()
     // @formatter:off
-        .where((q) => q.or([
-            q(sql`lower(coffees.name)`, 'like', sql`${queryString.toLowerCase()}`),
-            q(sql`lower(coffees.address)`, 'like', sql`${queryString.toLowerCase()}`)
-        ]))
-        // @formatter:on
-    .orderBy('coffees.created_at', 'desc').execute()
+    .where((q) =>
+      q.or([
+        q(sql`lower(coffees.name)`, 'like', sql`${queryString.toLowerCase()}`),
+        q(
+          sql`lower(coffees.address)`,
+          'like',
+          sql`${queryString.toLowerCase()}`
+        ),
+      ])
+    )
+    // @formatter:on
+    .orderBy('coffees.created_at', 'desc')
+    .execute();
 
   console.log(coffees);
 
@@ -48,7 +61,8 @@ export async function search(queryParam: string | undefined) {
 export async function review(id: string) {
   const db = await getDB();
 
-  const coffee = await db.selectFrom('coffees')
+  const coffee = await db
+    .selectFrom('coffees')
     .where('coffees.id', '=', id)
     .selectAll()
     .executeTakeFirst();
@@ -60,7 +74,8 @@ export async function review(id: string) {
   const bucketDB = await getMarknotesDB();
   const queryString = `%${coffee.name.trim().toLowerCase()}%`;
 
-  const post = await bucketDB.selectFrom('posts')
+  const post = await bucketDB
+    .selectFrom('posts')
     .selectAll()
     .where('posts.type', '=', 'coffee')
     .where(sql`lower(posts.title)`, 'like', sql`${queryString}`)
@@ -69,10 +84,14 @@ export async function review(id: string) {
   return { post };
 }
 
-export async function editCoffeeShop(data: InferOutput<typeof ModifyCoffeeReqSchema>, id: string) {
+export async function editCoffeeShop(
+  data: InferOutput<typeof ModifyCoffeeReqSchema>,
+  id: string
+) {
   const db = await getDB();
 
-  const result = await db.updateTable('coffees')
+  const result = await db
+    .updateTable('coffees')
     .set(mapModifyReqToCoffee(id, data))
     .where('coffees.id', '=', id)
     .executeTakeFirst();
@@ -83,10 +102,13 @@ export async function editCoffeeShop(data: InferOutput<typeof ModifyCoffeeReqSch
   };
 }
 
-export async function createCoffeeShop(data: InferOutput<typeof ModifyCoffeeReqSchema>) {
+export async function createCoffeeShop(
+  data: InferOutput<typeof ModifyCoffeeReqSchema>
+) {
   const db = await getDB();
   const id = uuidv7();
-  const result = await db.insertInto('coffees')
+  const result = await db
+    .insertInto('coffees')
     .values(mapModifyReqToCoffee(id, data))
     .executeTakeFirst();
 
@@ -96,7 +118,10 @@ export async function createCoffeeShop(data: InferOutput<typeof ModifyCoffeeReqS
   };
 }
 
-function mapModifyReqToCoffee(id: string, data: InferOutput<typeof ModifyCoffeeReqSchema>): Coffee {
+function mapModifyReqToCoffee(
+  id: string,
+  data: InferOutput<typeof ModifyCoffeeReqSchema>
+): Coffee {
   return {
     id: id,
     name: data.shopName,

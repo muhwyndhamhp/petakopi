@@ -16,9 +16,12 @@ export function CoffeeMarkers({ data, hovered, setHovered }: MarkerProps) {
   const setSelected = useAppStore((state) => state.setSelectedCoffee);
   const collapse = useAppStore((state) => state.collapsed);
 
-  const handleMarkerClick = useCallback((c: Coffee) => {
-    setSelected(c);
-  }, [setSelected]);
+  const handleMarkerClick = useCallback(
+    (c: Coffee) => {
+      setSelected(c);
+    },
+    [setSelected]
+  );
 
   const map = useMap('map-layer');
 
@@ -40,10 +43,12 @@ export function CoffeeMarkers({ data, hovered, setHovered }: MarkerProps) {
     <>
       {data?.map((c: Coffee) => {
         return (
-          <RMarker key={`marker-coffee-${c.id}`}
-                   longitude={c.lng} latitude={c.lat}
-                   initialAnchor="bottom"
-                   onClick={() => handleMarkerClick(c)}
+          <RMarker
+            key={`marker-coffee-${c.id}`}
+            longitude={c.lng}
+            latitude={c.lat}
+            initialAnchor="bottom"
+            onClick={() => handleMarkerClick(c)}
           >
             <CoffeeMarker
               key={`marker-coffee-${c.id}`}
@@ -59,4 +64,3 @@ export function CoffeeMarkers({ data, hovered, setHovered }: MarkerProps) {
     </>
   );
 }
-

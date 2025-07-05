@@ -54,7 +54,7 @@ export function getDB(): Promise<Kysely<Database>> {
 }
 
 export interface Database {
-  coffees: CoffeeTable,
-  images: ImageTable,
-  posts: PostTable
+  coffees: CoffeeTable;
+  images: ImageTable;
+  posts: PostTable;
 }

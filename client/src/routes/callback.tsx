@@ -19,21 +19,31 @@ export const Route = createFileRoute('/callback')({
 function RouteComponent() {
   const { code } = Route.useSearch();
 
-  const [error, setError] = useState<InvalidAuthorizationCodeError | undefined>();
+  const [error, setError] = useState<
+    InvalidAuthorizationCodeError | undefined
+  >();
 
   const cl = authClient(import.meta.env.VITE_ISSUER_URL);
 
   useEffect(() => {
     const redirect = async () => {
-      const challenge = JSON.parse(sessionStorage.getItem('challenge-key') ?? '') as Challenge;
+      const challenge = JSON.parse(
+        sessionStorage.getItem('challenge-key') ?? ''
+      ) as Challenge;
 
-      const exchanged = await cl.exchange(code, `${import.meta.env.VITE_CLIENT_URL}/callback`, challenge?.verifier);
+      const exchanged = await cl.exchange(
+        code,
+        `${import.meta.env.VITE_CLIENT_URL}/callback`,
+        challenge?.verifier
+      );
       if (exchanged.err) {
         setError(exchanged.err);
         return;
       }
 
-      const verified = await cl.verify(subjects, exchanged.tokens.access, { refresh: exchanged.tokens.refresh });
+      const verified = await cl.verify(subjects, exchanged.tokens.access, {
+        refresh: exchanged.tokens.refresh,
+      });
       if (verified.err) {
         setError(verified.err);
         return;
@@ -53,16 +63,19 @@ function RouteComponent() {
       window.location.href = '/';
     };
 
-    redirect().then(r => (console.log(r)));
+    redirect().then((r) => console.log(r));
   }, []);
 
   return (
     <div className="flex h-full w-full">
-      {
-        error !== undefined ?
-          (<p className="m-auto"> {`Your identity cannot be validated: ${error}`} </p>)
-          : (<p className="m-auto">Checking your identity...</p>)
-      }
+      {error !== undefined ? (
+        <p className="m-auto">
+          {' '}
+          {`Your identity cannot be validated: ${error}`}{' '}
+        </p>
+      ) : (
+        <p className="m-auto">Checking your identity...</p>
+      )}
     </div>
   );
 }

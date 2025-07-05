@@ -14,10 +14,17 @@ export const Route = createFileRoute('/$postId/edit')({
 function RouteComponent() {
   const { postId } = Route.useParams();
 
-  return <Editor id={postId} submitQuery={(input) => client.api.coffees[':id'].update.$post({
-    json: input,
-    param: {
-      id: postId,
-    },
-  })} />;
+  return (
+    <Editor
+      id={postId}
+      submitQuery={(input) =>
+        client.api.coffees[':id'].update.$post({
+          json: input,
+          param: {
+            id: postId,
+          },
+        })
+      }
+    />
+  );
 }

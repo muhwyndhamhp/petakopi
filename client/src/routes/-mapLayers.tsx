@@ -7,13 +7,15 @@ import { CoffeeMarkers } from './-mapLayers/-coffeeMarkers.tsx';
 import { useAppStore } from '@store/store.ts';
 
 export const DEFAULT_CENTER: LatLngTuple = [-7.5603894, 110.771847];
-const TILE_URL_LIGHT = 'https://resource.mwyndham.dev/sono/alidade_smooth_light.json';
-const TILE_URL_DARK = 'https://resource.mwyndham.dev/sono/alidade_smooth_dark.json';
+const TILE_URL_LIGHT =
+  'https://resource.mwyndham.dev/sono/alidade_smooth_light.json';
+const TILE_URL_DARK =
+  'https://resource.mwyndham.dev/sono/alidade_smooth_dark.json';
 
 function useDarkMode() {
   const [isDarkMode, setIsDarkMode] = useState(
     window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
+      window.matchMedia('(prefers-color-scheme: dark)').matches
   );
 
   useEffect(() => {
@@ -27,7 +29,6 @@ function useDarkMode() {
   return isDarkMode;
 }
 
-
 export function MapLayers() {
   const [location, setLocation] = useState<LatLngTuple>(DEFAULT_CENTER);
   const [hovered, setHovered] = useState<string | undefined>();
@@ -39,26 +40,16 @@ export function MapLayers() {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLocation([
-          position.coords.latitude,
-          position.coords.longitude,
-        ]);
-
-      },
-    );
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLocation([position.coords.latitude, position.coords.longitude]);
+    });
   }, []);
 
-  const { data } = useSWR(
-    'coffees',
-    rpcFetch(client.api.coffees.$get)({}),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 60000, // 1 minute
-    },
-  );
+  const { data } = useSWR('coffees', rpcFetch(client.api.coffees.$get)({}), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    dedupingInterval: 60000, // 1 minute
+  });
 
   const isDark = useDarkMode();
 
@@ -71,14 +62,8 @@ export function MapLayers() {
         initialCenter={[location[1], location[0]]}
         initialZoom={13}
       >
-        <CoffeeMarkers
-          data={data}
-          hovered={hovered}
-          setHovered={setHovered}
-        />
+        <CoffeeMarkers data={data} hovered={hovered} setHovered={setHovered} />
       </RMap>
     </div>
   );
 }
-
-

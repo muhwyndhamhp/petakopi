@@ -10,7 +10,8 @@ export const subjects = createSubjects({
   }),
 });
 
-export const authClient = (url: string) => createClient({
-  clientID: 'kopimap-go',
-  issuer: url,
-});
+export const authClient = (url: string) =>
+  createClient({
+    clientID: 'kopimap-go',
+    issuer: url,
+  });

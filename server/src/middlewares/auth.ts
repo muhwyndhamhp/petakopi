@@ -8,7 +8,9 @@ export const authMiddleware = createMiddleware(async (c, next) => {
   const refreshToken = getCookie(c, 'refresh_token')?.trim();
 
   const cl = authClient(Resource.IssuerUrl.value);
-  const verified = await cl.verify(subjects, accessToken ?? '', { refresh: refreshToken ?? '' });
+  const verified = await cl.verify(subjects, accessToken ?? '', {
+    refresh: refreshToken ?? '',
+  });
   if (verified.err) {
     return c.redirect('/authorize');
   }

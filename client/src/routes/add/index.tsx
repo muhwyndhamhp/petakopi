@@ -12,5 +12,9 @@ export const Route = createFileRoute('/add/')({
 });
 
 function RouteComponent() {
-  return <Editor submitQuery={(input) => client.api.coffees.$post({ json: input })} />;
+  return (
+    <Editor
+      submitQuery={(input) => client.api.coffees.$post({ json: input })}
+    />
+  );
 }

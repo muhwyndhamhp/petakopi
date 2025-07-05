@@ -11,15 +11,20 @@ function RouteComponent() {
 
   useEffect(() => {
     const redirect = async () => {
-      const {
-        challenge,
-        url,
-      } = await cl.authorize(`${import.meta.env.VITE_CLIENT_URL}/callback`, 'code', { pkce: true });
+      const { challenge, url } = await cl.authorize(
+        `${import.meta.env.VITE_CLIENT_URL}/callback`,
+        'code',
+        { pkce: true }
+      );
       sessionStorage.setItem('challenge-key', JSON.stringify(challenge));
       window.location.href = url;
     };
 
     redirect();
   }, []);
-  return <div className="flex h-full w-full"><p className="m-auto">Redirecting you to identity provider...</p></div>;
+  return (
+    <div className="flex h-full w-full">
+      <p className="m-auto">Redirecting you to identity provider...</p>
+    </div>
+  );
 }

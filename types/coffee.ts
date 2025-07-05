@@ -1,22 +1,30 @@
 import { type OpenHour } from './openHour';
 import type { Selectable } from 'kysely';
-import { custom, minLength, number, object, pipe, string, transform } from 'valibot';
+import {
+  custom,
+  minLength,
+  number,
+  object,
+  pipe,
+  string,
+  transform,
+} from 'valibot';
 import type { LatLngTuple } from 'leaflet';
 
 export interface CoffeeTable {
-  id: string,
-  lat: number,
-  lng: number,
-  address: string,
-  name: string,
-  rating: number,
-  created_at: Date | string,
-  updated_at: Date | string,
-  status: 'known' | 'reviewed' | 'closed',
-  open_hours: OpenHour
+  id: string;
+  lat: number;
+  lng: number;
+  address: string;
+  name: string;
+  rating: number;
+  created_at: Date | string;
+  updated_at: Date | string;
+  status: 'known' | 'reviewed' | 'closed';
+  open_hours: OpenHour;
 }
 
-export type Coffee = Selectable<CoffeeTable>
+export type Coffee = Selectable<CoffeeTable>;
 
 const validateLatLng = (lat: number, lng: number): boolean => {
   const isLatValid = !isNaN(lat) && lat >= -90 && lat <= 90;
@@ -42,14 +50,18 @@ const latLngFromStringSchema = pipe(
     const lng = parseFloat(parts[1].trim());
 
     return [lat, lng];
-  }),
+  })
 );
 
 const latLngTupleSchema = custom<LatLngTuple>((value) => {
   if (!Array.isArray(value) || value.length !== 2) return false;
 
   const [lat, lng] = value;
-  return typeof lat === 'number' && typeof lng === 'number' && validateLatLng(lat, lng);
+  return (
+    typeof lat === 'number' &&
+    typeof lng === 'number' &&
+    validateLatLng(lat, lng)
+  );
 }, 'Must be a valid LatLngTuple with latitude between -90 and 90, longitude between -180 and 180');
 
 const openHourSchema = pipe(
@@ -75,7 +87,7 @@ const openHourSchema = pipe(
     }
 
     return true;
-  }, 'Must be in HH:MM - HH:MM format'),
+  }, 'Must be in HH:MM - HH:MM format')
 );
 
 export const ModifyCoffeeSchema = object({
@@ -85,7 +97,6 @@ export const ModifyCoffeeSchema = object({
   rating: number(),
   address: pipe(string(), minLength(20)),
 });
-
 
 export const ModifyCoffeeReqSchema = object({
   ...ModifyCoffeeSchema.entries,

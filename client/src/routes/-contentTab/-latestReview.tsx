@@ -10,16 +10,18 @@ export function LatestReviews() {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       dedupingInterval: 60000, // 1 minute
-    },
+    }
   );
 
-  return (
-    !isLoading ? <div className="flex w-full flex-col tab-content">
+  return !isLoading ? (
+    <div className="flex w-full flex-col tab-content">
       <ul className="list">
         {data?.map((c) => {
           return <CoffeeListItem key={`coffee-item-${c.id}`} coffee={c} />;
         }) ?? null}
       </ul>
-    </div> : <div></div>
+    </div>
+  ) : (
+    <div></div>
   );
 }

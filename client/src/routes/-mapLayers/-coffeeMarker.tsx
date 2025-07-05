@@ -12,12 +12,12 @@ interface CoffeeMarkerProps {
 }
 
 export function CoffeeMarker({
-                               coffee,
-                               isSelected,
-                               isHovered,
-                               onClick,
-                               onHover,
-                             }: CoffeeMarkerProps) {
+  coffee,
+  isSelected,
+  isHovered,
+  onClick,
+  onHover,
+}: CoffeeMarkerProps) {
   const popupOffset = isSelected ? [-128, -140] : [-128, -130];
   const pinSize = isSelected ? '50px' : '40px';
   const pinClass = isSelected
@@ -36,10 +36,17 @@ export function CoffeeMarker({
         onMouseEnter={() => onHover(coffee.id)}
         onMouseLeave={() => onHover(undefined)}
       >
-        <RiMapPin2Fill className={`${pinClass} text-[${pinSize}]`} strokeWidth={1.7} />
+        <RiMapPin2Fill
+          className={`${pinClass} text-[${pinSize}]`}
+          strokeWidth={1.7}
+        />
         <div
-          className={`${!isHovered ? 'hidden' : ''} absolute p-2 w-72 card bg-base-100 border-2 border-base-300 font-sono shadow-xl`}
-          style={{ transform: `translate(${popupOffset[0]}px, ${popupOffset[1]}px)` }}
+          className={`${
+            !isHovered ? 'hidden' : ''
+          } absolute p-2 w-72 card bg-base-100 border-2 border-base-300 font-sono shadow-xl`}
+          style={{
+            transform: `translate(${popupOffset[0]}px, ${popupOffset[1]}px)`,
+          }}
         >
           <CoffeeListItem coffee={coffee} />
         </div>

@@ -57,29 +57,35 @@ export const coffeesApp = new Hono<{ Bindings: Env }>()
   })
 
   // Update Coffee Shop
-  .post('/:id/update',
+  .post(
+    '/:id/update',
     authMiddleware,
     vValidator('json', ModifyCoffeeReqSchema),
     async (c) => {
       const data = c.req.valid('json');
       const id = c.req.param('id');
       return c.json(await editCoffeeShop(data, id));
-    })
+    }
+  )
 
   // Create Coffee Shop
-  .post('/',
+  .post(
+    '/',
     authMiddleware,
     vValidator('json', ModifyCoffeeReqSchema),
     async (c) => {
       const data = c.req.valid('json');
       return c.json(await createCoffeeShop(data));
-    })
+    }
+  )
 
   // Images
-  .put('images',
+  .put(
+    'images',
     authMiddleware,
     vValidator('form', ImageUploadSchema),
     async (c) => {
       const data = c.req.valid('form');
       return c.json(await createImage(data));
-    });
+    }
+  );

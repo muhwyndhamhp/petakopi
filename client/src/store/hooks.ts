@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 
 export function useElementSize<T extends HTMLElement>(delay = 500) {
   const ref = useRef<T>(null);
-  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(
+    null
+  );
 
   useEffect(() => {
     const el = ref.current;

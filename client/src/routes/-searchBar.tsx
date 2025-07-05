@@ -19,7 +19,9 @@ export function SearchBar() {
 
         if (isCmdOrCtrl && e.key.toLowerCase() === 'k') {
           e.preventDefault();
-          const searchInput = document.getElementById('search-bar') as HTMLInputElement | null;
+          const searchInput = document.getElementById(
+            'search-bar'
+          ) as HTMLInputElement | null;
           if (searchInput) {
             searchInput.focus();
           }
@@ -44,7 +46,7 @@ export function SearchBar() {
 
   // Memoize search conditions and API call
   const shouldSearch = useMemo(() => query !== '', [query]);
-  
+
   const { data } = useSWR(
     shouldSearch ? ['searchBar', query] : null,
     () =>
@@ -52,13 +54,12 @@ export function SearchBar() {
         query: {
           q: query !== '' ? query : undefined,
         },
-      })()
-    ,
+      })(),
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       dedupingInterval: 30000, // 30 seconds for search
-    },
+    }
   );
 
   // Memoize store updates to prevent unnecessary re-renders
@@ -75,13 +76,20 @@ export function SearchBar() {
   }, [data, setSearchResult]);
 
   // Memoize the input handler
-  const handleInputChange = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    setInput(e.currentTarget.value);
-  }, []);
+  const handleInputChange = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      setInput(e.currentTarget.value);
+    },
+    []
+  );
 
   return (
     <label className="w-full drop-shadow-2xl input input-lg">
-      <svg className="opacity-50 h-[1em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg
+        className="opacity-50 h-[1em]"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
         <g
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -93,12 +101,12 @@ export function SearchBar() {
           <path d="m21 21-4.3-4.3"></path>
         </g>
       </svg>
-      <input 
-        id="search-bar" 
-        type="search" 
-        className="grow" 
-        placeholder="Search" 
-        onKeyUp={handleInputChange} 
+      <input
+        id="search-bar"
+        type="search"
+        className="grow"
+        placeholder="Search"
+        onKeyUp={handleInputChange}
       />
       <kbd className="kbd kbd-sm">⌘</kbd>
       <kbd className="kbd kbd-sm">K</kbd>
